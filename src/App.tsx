@@ -1,35 +1,54 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import "./App.css";
+type Post = {
+  id: string;
+  title: string;
+};
+// type NewPostMutation = {
+//   mutationFn: function (title:string)  {};
+//   onSuccess: string;
+// };
+const POSTS: Post[] = [
+  { id: "1", title: "post 1" },
+  { id: "1", title: "post 2" },
+];
 
-function App() {
-  const [count, setCount] = useState(0);
+export default function App() {
+  const queryClient = new QueryClient();
+
+  const postQuery = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => wait(1000).then(() => [...POSTS]),
+  });
+
+  const newPostMutation = useMutation({
+    mutationFn: async (title: string) => {
+      return wait(1000).then(() =>
+        POSTS.push({ id: crypto.randomUUID(), title })
+      );
+    },
+    onSuccess: () => {
+      return queryClient.invalidateQueries(["posts"]);
+    },
+  });
+
+  if (postQuery.isLoading) return <h1>Loadindg...</h1>;
+  if (postQuery.isError) return <pre>{JSON.stringify(postQuery.error)}</pre>;
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {postQuery?.data?.map((post) => (
+        <div key={post.id}>{post.title}</div>
+      ))}
+      <button
+        disabled={newPostMutation.isLoading}
+        onClick={() => newPostMutation.mutate("new Post")}
+      >
+        Add new Item
+      </button>
     </>
   );
 }
-
-export default App;
+function wait(duration: number): Promise<number> {
+  return new Promise((resolve) => setTimeout(resolve, duration));
+}
