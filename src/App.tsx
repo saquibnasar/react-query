@@ -16,6 +16,11 @@ const POSTS: Post[] = [
 export default function App() {
   const queryClient = new QueryClient();
 
+  // /posts -> ["posts"]
+  // /posts/1 -> ["posts", post.id]
+  // /posts?authorId=1 -> ["posts", { authorId: 1}]
+  // /posts/2/comments -> ["posts", post.id, "comments"]
+
   const postQuery = useQuery({
     queryKey: ["posts"],
     queryFn: () => wait(1000).then(() => [...POSTS]),
