@@ -21,6 +21,7 @@ export default function App() {
       >
         New Post
       </button>
+      test
       {currentPage}
     </div>
   );
