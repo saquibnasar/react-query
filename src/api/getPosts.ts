@@ -9,11 +9,14 @@ export async function getPosts() {
 
 export function getPostsPaginated(page: number) {
   return axios
-    .get("https://reqres.in/api/users", {
+    .get("https://reqres.in/api/unknown/1", {
       params: { _page: page, _sort: "title", _limit: 2 },
     })
     .then((res) => {
+      console.log(res);
       const hasNext = page * 2 <= parseInt(res.headers["x-total-count"]);
+
+      console.log(hasNext);
       return {
         nextPage: hasNext ? page + 1 : undefined,
         previousPage: page > 1 ? page - 1 : undefined,
@@ -23,10 +26,12 @@ export function getPostsPaginated(page: number) {
 }
 
 export async function getPost(id: number) {
-  return axios.get(`https://reqres.in/api/users/${id}`).then((res) => res.data);
+  return axios
+    .get(`https://reqres.in/api/users/${id}`)
+    .then((res) => res.data.data);
 }
 
-export function CreatePost({ title, body }: DataTYpe) {
+export function createPost({ title, body }: DataTYpe) {
   return axios
     .post("https://reqres.in/api/users", {
       title,

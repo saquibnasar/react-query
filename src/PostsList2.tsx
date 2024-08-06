@@ -12,7 +12,7 @@ export default function PostsList2() {
     queryFn: getPosts,
   });
 
-  if (postsQuery.status === "pending") return <h1>Loading...</h1>;
+  if (postsQuery.isLoading) return <h1>Loading...</h1>;
   if (postsQuery.status === "error")
     <h1>{JSON.stringify(postsQuery.error)}</h1>;
 

@@ -9,9 +9,9 @@ export default function Post({ id }: { id: number }) {
   });
 
   const userQuery = useQuery({
-    queryKey: ["users", postQuery?.data?.userId],
-    enabled: postQuery?.data?.userId != null,
-    queryFn: () => getUser(postQuery.data.userId),
+    queryKey: ["users", postQuery?.data?.id],
+    enabled: postQuery?.data?.id != null,
+    queryFn: () => getUser(postQuery.data.id),
   });
 
   if (postQuery.isLoading) return <h1>Loading...</h1>;
@@ -22,7 +22,7 @@ export default function Post({ id }: { id: number }) {
   return (
     <>
       <h1>
-        {postQuery.data.title} <br />
+        {postQuery.data.first_name} <br />
         <small>
           {userQuery.isLoading
             ? "Loading User..."
@@ -31,7 +31,7 @@ export default function Post({ id }: { id: number }) {
             : userQuery.data.name}
         </small>
       </h1>
-      <p>{postQuery.data.body}</p>
+      <p>{postQuery.data.email}</p>
     </>
   );
 }

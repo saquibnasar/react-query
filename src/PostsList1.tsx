@@ -9,8 +9,7 @@ export default function PostsList1() {
     placeholderData: [{ id: 1, title: "Initial Data" }],
   });
 
-  if (postsQuery.status === "pending") {
-    console.log(postsQuery.status);
+  if (postsQuery.isLoading) {
     return <h1>Loading...</h1>;
   }
   if (postsQuery.status === "error") {
