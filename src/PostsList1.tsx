@@ -19,7 +19,7 @@ export default function PostsList1() {
   return (
     <div>
       <h1>Posts List 1</h1>
-
+      fdfsfsda
       <ol>
         {postsQuery?.data?.map((post: ApiType) => {
           return <li key={post.id}>{post.first_name}</li>;
